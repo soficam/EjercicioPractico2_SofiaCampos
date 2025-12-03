@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <main class="container my-4">
+            <h2>Gestión de roles</h2>
+
+            <div class="d-flex justify-content-end mb-3">
+                <a class="btn btn-success" th:href="@{/admin/roles/nuevo}">
+                    <i class="fas fa-plus"></i> Nuevo rol
+                </a>
+            </div>
+
+
+            <table class="table table-striped mt-3">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${roles}">
+                        <td th:text="${r.id}">1</td>
+                        <td th:text="${r.nombre}">ADMIN</td>
+                        <td th:text="${r.descripcion}">Administrador del sistema</td>
+                        <td>
+                            <a th:href="@{/admin/roles/editar/{id}(id=${r.id})}"
+                               class="btn btn-sm btn-primary">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <form th:action="@{/admin/roles/eliminar}" method="post"
+                                  style="display:inline;">
+                                <input type="hidden" name="id" th:value="${r.id}"/>
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('¿Eliminar rol?');">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>
+

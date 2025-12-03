@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"></header>
+
+        <main class="container my-4">
+
+            <h2 class="mb-4">Reportes del sistema</h2>
+
+            <div class="row">
+
+                <!--Resumen activos -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header text-white" style="background:#00C0F3;">
+                            <strong>Resumen activos / inactivos</strong>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Activos:</strong> <span th:text="${activos}">0</span></p>
+                            <p><strong>Inactivos:</strong> <span th:text="${inactivos}">0</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Usuarios por rol -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header text-white bg-primary">
+                            <strong>Usuarios por rol</strong>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li th:each="r : ${resumenRoles}">
+                                    <strong th:text="${r.nombre}"></strong>:
+                                    <span th:text="${r.total}"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Ultimos usuarios creados -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header text-white bg-success">
+                            <strong>Últimos usuarios registrados</strong>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li th:each="u : ${ultimos}">
+                                    <span th:text="${u.nombre}"></span>
+                                    <span th:text="${u.apellido}"></span>
+                                    <br><small class="text-muted" th:text="${u.email}"></small>
+                                </li>
+                            </ul>
+                            <p class="text-muted">(Los últimos 5 usuarios)</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+    </body>
+</html>

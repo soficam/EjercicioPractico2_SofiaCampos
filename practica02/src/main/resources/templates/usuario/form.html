@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <main class="container my-4">
+            <h2 th:text="${usuario.id} == null ? 'Nuevo usuario' : 'Editar usuario'">Usuario</h2>
+
+            <form th:action="@{/admin/usuarios/guardar}"
+                  th:object="${usuario}"
+                  method="post"
+                  class="mt-3">
+
+                <input type="hidden" th:field="*{id}"/>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" th:field="*{nombre}" required/>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Apellido</label>
+                        <input type="text" class="form-control" th:field="*{apellido}" required/>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" th:field="*{email}" required/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Contraseña
+                        <small class="text-muted"
+                               th:if="${usuario.id != null}">
+                            (dejar en blanco para mantener la actual)
+                        </small>
+                    </label>
+                    <input type="password" class="form-control"
+                           th:field="*{password}"
+                           placeholder="Contraseña"/>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Rol</label>
+                        <select class="form-select" th:field="*{rol.id}">
+                            <option th:each="r : ${roles}"
+                                    th:value="${r.id}"
+                                    th:text="${r.nombre}">
+                                Rol
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center">
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox"
+                                   th:field="*{activo}" id="chkActivo"/>
+                            <label class="form-check-label" for="chkActivo">Activo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                    <a th:href="@{/admin/usuarios/listado}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>

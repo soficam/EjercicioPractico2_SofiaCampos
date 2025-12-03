@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"></head>
+    <body>
+
+        <header th:replace="~{general/fragmentos :: header}"></header>
+
+        <main class="container my-4">
+
+            <h2 class="mb-4">Mi perfil</h2>
+
+            <div class="card shadow-sm" style="max-width: 450px;">
+                <div class="card-header bg-primary text-white">
+                    <strong th:text="${#authentication.name}">correo@ejemplo.com</strong>
+                </div>
+                <div class="card-body">
+                    <p><strong>Correo:</strong>
+                        <span th:text="${#authentication.name}"></span>
+                    </p>
+
+                    <p><strong>Rol:</strong>
+                        <span th:text="${#strings.substringAfter(#authentication.authorities.iterator().next().authority, 'ROLE_')}"></span>
+                    </p>
+                </div>
+            </div>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+    </body>
+</html>

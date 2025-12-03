@@ -1,0 +1,94 @@
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <!-- Head -->
+    <head th:fragment="head">
+        <meta charset="UTF-8"/>
+        <title>Plataforma Académica</title>
+
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.2/css/all.min.css}"/>
+
+        <script th:src="@{/webjars/jquery/3.7.1/dist/jquery.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.bundle.min.js}"></script>
+
+        <link rel="stylesheet" th:href="@{/css/estilos.css}"/>
+    </head>
+
+
+    <!-- Header y Navbar -->
+    <body>
+        <header th:fragment="header">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" th:href="@{/}">Plataforma Académica</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarPrincipal" aria-controls="navbarPrincipal"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarPrincipal">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <!-- Solo ADMIN -->
+                            <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                                <a class="nav-link dropdown-toggle" href="#" role="button"
+                                   data-bs-toggle="dropdown">Administración</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" th:href="@{/admin/usuarios/listado}">Gestión de usuarios</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/admin/roles/listado}">Gestión de roles</a></li>
+                                </ul>
+                            </li>
+
+                            <!-- PROFESOR / ADMIN -->
+                            <li class="nav-item" sec:authorize="hasAnyRole('PROFESOR','ADMIN')">
+                                <a class="nav-link" th:href="@{/consultas/listado}">Consultas avanzadas</a>
+                            </li>
+                            <li class="nav-item" sec:authorize="hasAnyRole('PROFESOR','ADMIN')">
+                                <a class="nav-link" th:href="@{/profesor/reportes}">Reportes</a>
+                            </li>
+
+                            <!-- ESTUDIANTE / ADMIN -->
+                            <li class="nav-item" sec:authorize="hasAnyRole('ESTUDIANTE','ADMIN','PROFESOR')">
+                                <a class="nav-link" th:href="@{/estudiante/perfil}">Mi perfil</a>
+                            </li>
+                        </ul>
+
+                        <!-- Info usuario + login/logout -->
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item me-2" sec:authorize="isAuthenticated()">
+                                <span class="navbar-text text-white">
+                                    <i class="fas fa-user"></i>
+                                    <span th:text="${session.nombreUsuario} ?: 'Usuario'">Usuario</span>
+                                </span>
+                            </li>
+                            <li class="nav-item" sec:authorize="isAnonymous()">
+                                <a class="btn btn-outline-light" th:href="@{/login}">
+                                    <i class="fas fa-sign-in-alt"></i> Login
+                                </a>
+                            </li>
+                            <li class="nav-item" sec:authorize="isAuthenticated()">
+                                <form th:action="@{/logout}" method="post">
+                                    <button class="btn btn-outline-light" type="submit">
+                                        <i class="fas fa-sign-out-alt"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Footer -->
+        <footer th:fragment="footer" class="bg-light text-center mt-5 py-3 border-top">
+            <small>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span>
+                Plataforma Académica - Sofia Campos</small>
+        </footer>
+    </body>
+</html>

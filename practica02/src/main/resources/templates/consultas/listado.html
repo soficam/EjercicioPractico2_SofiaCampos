@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"></head>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"></header>
+
+        <main class="container my-4">
+            <h2 class="mb-4">Consultas avanzadas de usuarios</h2>
+
+            <div class="row g-4 mb-4">
+                
+                <!-- Consulta por rol -->
+                <div class="col-md-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-primary text-white text-center">
+                            <strong>Consulta por rol</strong>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/consultas/porRol}" method="post">
+                                <div class="mb-3">
+                                    <label class="form-label">Rol</label>
+                                    <select class="form-select" name="nombreRol" required>
+                                        <option value="" disabled
+                                                th:selected="${filtroRol == null}">Seleccione…</option>
+                                        <option th:each="r : ${roles}"
+                                                th:value="${r.nombre}"
+                                                th:text="${r.nombre}"
+                                                th:selected="${filtroRol != null and filtroRol == r.nombre}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search"></i> Buscar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Consulta por rango de fechas -->
+                <div class="col-md-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-warning text-dark text-center">
+                            <strong>Usuarios creados entre fechas</strong>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/consultas/porFechas}" method="post">
+                                <div class="mb-3">
+                                    <label class="form-label">Fecha inicio</label>
+                                    <input type="date" name="fechaInicio" class="form-control"
+                                           th:value="${fechaInicio}"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Fecha fin</label>
+                                    <input type="date" name="fechaFin" class="form-control"
+                                           th:value="${fechaFin}"/>
+                                </div>
+                                <button type="submit" class="btn btn-warning w-100">
+                                    <i class="fas fa-search"></i> Buscar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Consulta por texto de correo o nombre -->
+                <div class="col-md-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-success text-white text-center">
+                            <strong>Correo o nombre contiene</strong>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/consultas/porTexto}" method="post">
+                                <div class="mb-3">
+                                    <label class="form-label">Texto</label>
+                                    <input type="text" name="texto" class="form-control"
+                                           th:value="${texto}"/>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-search"></i> Buscar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen activos vs inactivos -->
+                <div class="col-md-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-info text-white text-center">
+                            <strong>Resumen activos / inactivos</strong>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-1">
+                                <strong>Activos:</strong>
+                                <span th:text="${resumen[true] ?: 0}">0</span>
+                            </p>
+                            <p class="mb-0">
+                                <strong>Inactivos:</strong>
+                                <span th:text="${resumen[false] ?: 0}">0</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de resultados -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    Resultados
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Correo</th>
+                                    <th>Rol</th>
+                                    <th>Activo</th>
+                                    <th>Fecha creación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="u : ${usuarios}">
+                                    <td th:text="${u.id}">1</td>
+                                    <td th:text="${u.nombre}">Carlos</td>
+                                    <td th:text="${u.apellido}">Ramírez</td>
+                                    <td th:text="${u.email}">c.ramirez@correo.com</td>
+                                    <td th:text="${u.rol.nombre}">ADMIN</td>
+                                    <td>
+                                        <span th:text="${u.activo} ? 'Sí' : 'No'">Sí</span>
+                                    </td>
+                                    <td th:text="${#temporals.format(u.fechaCreacion, 'yyyy-MM-dd HH:mm')}">
+                                        2025-12-02
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(usuarios)}">
+                                    <td colspan="7" class="text-center py-3">
+                                        No hay resultados para la consulta.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+    </body>
+</html>

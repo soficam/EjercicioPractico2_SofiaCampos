@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"/>
+<body>
+<header th:replace="~{general/fragmentos :: header}"/>
+
+<main class="container my-4">
+    <h2 th:text="${rol.id} == null ? 'Nuevo rol' : 'Editar rol'">Rol</h2>
+
+    <form th:action="@{/admin/roles/guardar}"
+          th:object="${rol}"
+          method="post"
+          class="mt-3">
+
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control"
+                   th:field="*{nombre}" required/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-control"
+                      th:field="*{descripcion}" rows="3"></textarea>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+            <a th:href="@{/admin/roles/listado}" class="btn btn-secondary">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{general/fragmentos :: footer}"/>
+</body>
+</html>
